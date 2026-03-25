@@ -63,19 +63,19 @@ namespace NESEmulator
             while (instructionsExecuted < instructionsNumber)
             {
                 instructionsExecuted++;
+                string logString = $"{ PC.ToString("X4") }\t";
                 byte op = _bus.Read(PC++);
-                string logString = "";
                 switch (op)
                 {
                     // JMP
                     case 0x4C: // JMP (Absolute)
-                        logString += $"{PC.ToString("X4")}\tJMP (ABSOLUTE)";
+                        logString += $"JMP (ABSOLUTE)";
                         JmpAbs();
                         logString += $"\t{RegisterDataToString()}";
                         logData.Add(logString);
                         break; 
                     case 0x6C: // JMP (Indirect)
-                        logString += $"{PC.ToString("X4")}\tJMP (ABSOLUTE)";
+                        logString += $"JMP (ABSOLUTE)";
                         JmpInd();
                         logString += $"\t{RegisterDataToString()}";
                         logData.Add(logString);
