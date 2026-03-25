@@ -6,12 +6,12 @@ namespace NESEmulator
 {
     internal class NESMemoryBus
     {
-        private byte[] _ram = new byte[0x800];
-        private byte[] _ppu = new byte[0x008];
-        private byte[] _apu = new byte[0x017];
+        private readonly byte[] _ram = new byte[0x800];
+        private readonly byte[] _ppu = new byte[0x008];
+        private readonly byte[] _apu = new byte[0x017];
 
-        private byte[] _prgRam = new byte[0x2000];
-        private byte[] _prgRom = new byte[0x8000];
+        private readonly byte[] _prgRam = new byte[0x2000];
+        private readonly byte[] _prgRom = new byte[0x8000];
 
         public void Write(byte data, ushort addr)
         {
@@ -42,6 +42,11 @@ namespace NESEmulator
             return _prgRom[addr - 0x8000];  // cartridge ROM (everything >= 0x8000 falls here)
         }
 
+
+        public void WriteROM(byte[] romData)
+        {
+            Array.Copy(romData, 0, _prgRom, 0, romData.Length);
+        }
 
 
     }
