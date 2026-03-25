@@ -10,6 +10,6 @@ NESCpu cpu = new NESCpu(bus);
 rom.Load(path);
 
 Console.WriteLine("Successfully loaded ROM into memory!");
-int opcodesToExecute = 2;
+int opcodesToExecute = 5;
 cpu.ExecuteAndLog(opcodesToExecute, "./test.log");
 Console.WriteLine($"Successfully executed {opcodesToExecute} opcodes and written to the test.log!");
