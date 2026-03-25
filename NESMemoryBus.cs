@@ -15,16 +15,28 @@ namespace NESEmulator
 
         public void Write(byte data, ushort addr)
         {
-            if (addr <= 0x1FFF) // map RAM
+            Console.WriteLine(addr.ToString("X4"));
+            if (addr <= 0x1FFF)
+            { // map RAM
                 _ram[addr & 0x07FF] = data;
-            if (addr <= 0x3FFF) // map PPU
+                return;
+            }
+            if (addr <= 0x3FFF)
+            { // map PPU
                 _ppu[addr % 0x0008] = data; // repeats each 8 bytes
-            if (addr <= 0x4017) // map APU
+                return;
+            }
+            if (addr <= 0x4017)
+            { // map APU
                 _apu[addr - 0x4000] = data;
-            if (addr <= 0x5FFF)
+                return;
+            }
+            if (addr <= 0x5FFF)  
                 return; // unused / mapper expansion
-            if (addr <= 0x7FFF)
+            if (addr <= 0x7FFF) { 
                 _prgRam[addr - 0x6000] = data;  // cartridge RAM
+                return;
+            }
             _prgRom[addr - 0x8000] = data;  // cartridge ROM (everything >= 0x8000 falls here)
         } 
         public byte Read(ushort addr)
