@@ -75,7 +75,7 @@ namespace NESEmulator
                         logData.Add(logString);
                         break; 
                     case 0x6C: // JMP (Indirect)
-                        logString += $"JMP (ABSOLUTE)";
+                        logString += $"JMP (INDIRECT)";
                         JmpInd();
                         logString += $"\t{RegisterDataToString()}";
                         logData.Add(logString);
