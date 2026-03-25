@@ -31,6 +31,6 @@ namespace NESEmulator.CPU
             _opcodeTable[0xB4] = () => Ldy(_addressModes.ReadZeroPageX()); // ZP X
             _opcodeTable[0xAC] = () => Ldy(_addressModes.ReadAbsolute()); // ABS
             _opcodeTable[0xBC] = () => Ldy(_addressModes.ReadAbsoluteX()); // ABS X
-           }
+        }
     }
 }
