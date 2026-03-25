@@ -24,7 +24,23 @@ namespace NESEmulator.CPU
             P = 0x24;
             S = 0xFD;
         }
-        public string ToString()
+        public enum StatusRegisterBit
+        {
+            Carry = 0,
+            Zero = 1,
+            InterruptDisable = 2,
+            Decimal = 3,
+            Overflow = 6,
+            Negative = 7
+        }
+        public void SetStatusRegisterFlag(StatusRegisterBit bit, bool value) {
+            if (value)
+                P |= (byte)(1 << (int)bit);
+            else
+                P &= (byte)~(1 << (int)bit); 
+        }
+        
+        public override string ToString()
         {
             return $"PC: {PC.ToString("X4")}, A: {A.ToString("X2")}, X: {X.ToString("X2")}, Y: {Y.ToString("X2")}, S: {S.ToString("X2")}, P: {P.ToString("X2")}";
         }
