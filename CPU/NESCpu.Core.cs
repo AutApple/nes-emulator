@@ -29,11 +29,6 @@ namespace NESEmulator.CPU
             _registers.Reset();
         }
 
-        private void UpdateFlagsLd(byte value)
-        {
-            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Zero, value == 0);
-            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Negative, (value & 0b1000) != 0);
-        }
         // Method for testing purposes only. executes N instructions and writes the result to log
         public void ExecuteAndLog(int instructionsNumber, string logFilePath)
         {
