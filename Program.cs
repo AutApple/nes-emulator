@@ -9,3 +9,4 @@ NESCpu cpu = new NESCpu(bus);
 rom.Load(path);
 
 Console.WriteLine("Successfully loaded ROM into memory!");
+Console.WriteLine($"Reset vector: lo byte {bus.Read(0xFFFC).ToString("X2")} hi byte {bus.Read(0xFFFD).ToString("X2")}");

@@ -11,7 +11,7 @@ namespace NESEmulator
         private readonly byte[] _apu = new byte[0x017];
 
         private readonly byte[] _prgRam = new byte[0x2000];
-        private readonly byte[] _prgRom = new byte[0x8000];
+        private byte[] _prgRom = new byte[0x8000];
 
         public void Write(byte data, ushort addr)
         {
@@ -39,13 +39,13 @@ namespace NESEmulator
                 return 0; // unused / mapper expansion
             if (addr <= 0x7FFF)
                 return _prgRam[addr - 0x6000];  // cartridge RAM
-            return _prgRom[addr - 0x8000];  // cartridge ROM (everything >= 0x8000 falls here)
+            return _prgRom[(addr - 0x8000) % _prgRom.Length];  // cartridge ROM (everything >= 0x8000 falls here) + mirroring across 
         }
 
 
         public void WriteROM(byte[] romData)
         {
-            Array.Copy(romData, 0, _prgRom, 0, romData.Length);
+            _prgRom = romData;
         }
 
 
