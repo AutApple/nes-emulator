@@ -31,6 +31,24 @@ namespace NESEmulator.CPU
             _opcodeTable[0xB4] = () => Ldy(_addressModes.ReadZeroPageX()); // ZP X
             _opcodeTable[0xAC] = () => Ldy(_addressModes.ReadAbsolute()); // ABS
             _opcodeTable[0xBC] = () => Ldy(_addressModes.ReadAbsoluteX()); // ABS X
+            // STA
+            _opcodeTable[0x85] = () => Sta(_addressModes.GetZeroPageAddress()); // ZP
+            _opcodeTable[0x95] = () => Sta(_addressModes.GetZeroPageXAddress()); // ZP X
+            _opcodeTable[0x8D] = () => Sta(_addressModes.GetAbsoluteAddress()); // ABS
+            _opcodeTable[0x9D] = () => Sta(_addressModes.GetAbsoluteXAddress()); // ABS X
+            _opcodeTable[0x99] = () => Sta(_addressModes.GetAbsoluteYAddress()); // ABS Y
+            _opcodeTable[0x81] = () => Sta(_addressModes.GetIndirectXAddress()); // IND X
+            _opcodeTable[0x91] = () => Sta(_addressModes.GetIndirectYAddress()); // IND Y
+            // STX
+            _opcodeTable[0x86] = () => Stx(_addressModes.GetZeroPageAddress()); // ZP
+            _opcodeTable[0x96] = () => Stx(_addressModes.GetZeroPageYAddress()); // ZP Y
+            _opcodeTable[0x8E] = () => Stx(_addressModes.GetAbsoluteAddress()); // ABS
+            // STY
+            _opcodeTable[0x84] = () => Sty(_addressModes.GetZeroPageAddress()); // ZP
+            _opcodeTable[0x94] = () => Sty(_addressModes.GetZeroPageXAddress()); // ZP X
+            _opcodeTable[0x8C] = () => Sty(_addressModes.GetAbsoluteAddress()); // ABS
+
+
         }
     }
 }

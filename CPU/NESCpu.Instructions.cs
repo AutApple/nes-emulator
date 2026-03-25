@@ -11,6 +11,21 @@ namespace NESEmulator.CPU
             this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Zero, value == 0);
             this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Negative, (value & 0b1000) != 0);
         }
+        private void Sta(ushort addr)
+        {
+            this._bus.Write(this._registers.A, addr);
+        }
+
+        private void Stx(ushort addr)
+        {
+            this._bus.Write(this._registers.X, addr);
+
+        }
+
+        private void Sty(ushort addr)
+        {
+            this._bus.Write(this._registers.Y, addr);
+        }
 
         private void Lda(byte value)
         {

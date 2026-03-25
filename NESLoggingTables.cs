@@ -34,6 +34,23 @@ namespace NESEmulator
             InstructionNameTable[0xB4] = "LDY"; // ZP X
             InstructionNameTable[0xAC] = "LDY"; // ABS
             InstructionNameTable[0xBC] = "LDY"; // ABS X
+
+            // STA
+            InstructionNameTable[0x85] = "STA"; // ZP
+            InstructionNameTable[0x95] = "STA"; // ZP X
+            InstructionNameTable[0x8D] = "STA"; // ABS
+            InstructionNameTable[0x9D] = "STA"; // ABS X
+            InstructionNameTable[0x99] = "STA"; // ABS Y
+            InstructionNameTable[0x81] = "STA"; // IND X
+            InstructionNameTable[0x91] = "STA"; // IND Y
+            // STX
+            InstructionNameTable[0x86] = "STX"; // ZP
+            InstructionNameTable[0x96] = "STX"; // ZP Y
+            InstructionNameTable[0x8E] = "STX"; // ABS
+            // STY
+            InstructionNameTable[0x84] = "STY"; // ZP
+            InstructionNameTable[0x94] = "STY"; // ZP X
+            InstructionNameTable[0x8C] = "STY"; // ABS
         }
 
     }
