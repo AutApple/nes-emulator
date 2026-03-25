@@ -1,5 +1,6 @@
 ﻿// https://github.com/nwidger/nintengo/blob/master/m65go2/test-roms/nestest/nestest.log
 using NESEmulator;
+using NESEmulator.CPU;
 
 string path = args[0] ?? "test.nes";
 
@@ -9,6 +10,6 @@ NESCpu cpu = new NESCpu(bus);
 rom.Load(path);
 
 Console.WriteLine("Successfully loaded ROM into memory!");
-int opcodesToExecute = 1;
+int opcodesToExecute = 2;
 cpu.ExecuteAndLog(opcodesToExecute, "./test.log");
 Console.WriteLine($"Successfully executed {opcodesToExecute} opcodes and written to the test.log!");
