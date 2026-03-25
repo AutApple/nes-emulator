@@ -15,7 +15,6 @@ namespace NESEmulator
 
         public void Write(byte data, ushort addr)
         {
-            Console.WriteLine(addr.ToString("X4"));
             if (addr <= 0x1FFF)
             { // map RAM
                 _ram[addr & 0x07FF] = data;
