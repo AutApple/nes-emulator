@@ -14,6 +14,6 @@ namespace NESEmulator
 
         public byte S { get; private set; } // stack pointer
         public byte P { get; private set; } // status register
-        private NESMemoryBus _bus = bus;
+        private readonly NESMemoryBus _bus = bus;
     }
 }
