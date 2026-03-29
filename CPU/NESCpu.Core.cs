@@ -28,6 +28,16 @@ namespace NESEmulator.CPU
             //registers.PC = (ushort)((hi << 16) | lo);
             _registers.Reset();
         }
+        public void PushStack(byte value)
+        {
+            _bus.Write(value, (ushort)(0x100 + this._registers.S)); // write to the stack
+            this._registers.S--; // decrement stack pointer (wrap on overflow)
+        }
+
+        public byte PullStack()
+        {
+            return _bus.Read((ushort)(0x100 + ++this._registers.S)); // increment stack pointer and read from stack (wrap on underflow)
+        }
 
         // Method for testing purposes only. executes N instructions and writes the result to log
         public void ExecuteAndLog(int instructionsNumber, string logFilePath)
