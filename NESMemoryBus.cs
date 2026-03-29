@@ -36,7 +36,7 @@ namespace NESEmulator
                 _prgRam[addr - 0x6000] = data;  // cartridge RAM
                 return;
             }
-            _prgRom[addr - 0x8000] = data;  // cartridge ROM (everything >= 0x8000 falls here)
+            _prgRom[(addr - 0x8000) % _prgRom.Length] = data;  // cartridge ROM (everything >= 0x8000 falls here)
         } 
         public byte Read(ushort addr)
         { 
@@ -53,7 +53,7 @@ namespace NESEmulator
             return _prgRom[(addr - 0x8000) % _prgRom.Length];  // cartridge ROM (everything >= 0x8000 falls here) + mirroring across 
         }
 
-
+       
         public void WriteROM(byte[] romData)
         {
             _prgRom = romData;
