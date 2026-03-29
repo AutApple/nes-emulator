@@ -54,8 +54,14 @@ namespace NESEmulator.CPU
             _opcodeTable[0x84] = () => Sty(_addressModes.GetZeroPageAddress()); // ZP
             _opcodeTable[0x94] = () => Sty(_addressModes.GetZeroPageXAddress()); // ZP X
             _opcodeTable[0x8C] = () => Sty(_addressModes.GetAbsoluteAddress()); // ABS
-
-
+            // PHA
+            _opcodeTable[0x48] = () => Pha();
+            // PHP
+            _opcodeTable[0x08] = () => Php();
+            // PLA
+            _opcodeTable[0x68] = () => Pla();
+            // PLP
+            _opcodeTable[0x28] = () => Plp();
         }
     }
 }

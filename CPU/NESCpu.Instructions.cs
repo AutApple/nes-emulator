@@ -82,5 +82,25 @@ namespace NESEmulator.CPU
             this._registers.PC = addr;
         }
 
+        private void Pha()
+        {
+            PushStack(_registers.A);
+        }
+        private void Pla()
+        {
+            byte value = PullStack();
+            _registers.A = value;
+            UpdateFlagsLd(value);
+        }
+
+        private void Php()
+        {
+            PushStack(_registers.P);
+        }
+        private void Plp()
+        {
+            byte value = PullStack();
+            _registers.P = value;
+        }
     }
 }
