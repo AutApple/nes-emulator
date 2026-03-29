@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -60,6 +61,25 @@ namespace NESEmulator.CPU
             ushort hiVal = _bus.Read((ushort)(addr + 1));
             ushort val = (ushort)((hiVal << 8) | loVal);
             _registers.PC = val;
+        }
+
+        private void Jsr(ushort addr)
+        {
+            byte high = (byte)(_registers.PC >> 2);
+            byte low = (byte)(_registers.PC & 0xFF);
+
+            PushStack(high);
+            PushStack(low);
+
+            _registers.PC = addr;
+        }
+
+        private void Rts()
+        {
+            byte low = PullStack();
+            byte high = PullStack();
+            ushort addr = (ushort)(((high << 2) | low) + 1);
+            this._registers.PC = addr;
         }
 
     }

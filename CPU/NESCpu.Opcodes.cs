@@ -8,8 +8,15 @@ namespace NESEmulator.CPU
     {
         public void InitOpcodesTable()
         {
+            // JMP
             _opcodeTable[0x4C] = () => JmpAbs(); // JMP (Absolute)
             _opcodeTable[0x6C] = () => JmpInd(); // JMP (Indirect)
+            // JSR
+            _opcodeTable[0x20] = () => Jsr(_addressModes.ReadAbsolute());
+            // RTS
+            _opcodeTable[0x60] = () => Rts();
+
+
             // LDA
             _opcodeTable[0xA9] = () => Lda(_addressModes.ReadImmediate()); // Immediate
             _opcodeTable[0xA5] = () => Lda(_addressModes.ReadZeroPage()); // ZP
