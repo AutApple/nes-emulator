@@ -116,13 +116,16 @@ namespace NESEmulator.CPU
         {
             if (!this._registers.GetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Carry))
                 return;
-            _registers.P += addrShift;
+            int offset = ((addrShift & 0x80) != 0 ? -1 : 1) * (addrShift & 0x7F);
+            _registers.PC = (ushort) (_registers.PC + offset);
         }
         private void Beq(byte addrShift)
         {
             if (!this._registers.GetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Zero))
                 return;
-            _registers.P += addrShift;
+            int offset = ((addrShift & 0x80) != 0 ? -1 : 1) * (addrShift & 0x7F);
+            _registers.PC = (ushort)(_registers.PC + offset);
+
         }
 
         // JUMP
