@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NESEmulator.CPU
 {
@@ -107,7 +108,127 @@ namespace NESEmulator.CPU
             this._bus.Write(newValue, addr);
         }
 
+        private void Dec(ushort addr)
+        {
+            byte newValue = (byte)(this._bus.Read(addr) - 1);
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Zero, newValue == 0);
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Negative, (newValue & 0x80) != 0);
+            this._bus.Write(newValue, addr);
+        }
+
+        private void Inx()
+        {
+            this._registers.X++;
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Zero, this._registers.X == 0);
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Negative, (this._registers.X & 0x80) != 0);
+        }
+        private void Dex()
+        {
+            this._registers.X--;
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Zero, this._registers.X == 0);
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Negative, (this._registers.X & 0x80) != 0);
+        }
+        private void Iny()
+        {
+            this._registers.Y++;
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Zero, this._registers.Y == 0);
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Negative, (this._registers.Y & 0x80) != 0);
+        }
+        private void Dey()
+        {
+            this._registers.Y--;
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Zero, this._registers.Y == 0);
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Negative, (this._registers.Y & 0x80) != 0);
+        }
         // SHIFT
+        private void AslAccum() // accumulator 
+        {
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Carry, (this._registers.A & 0x80) != 0);
+            this._registers.A <<= 1;
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Zero, this._registers.A == 0);
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Negative, (this._registers.A & 0x80) != 0);
+        }
+
+        private void Asl(ushort addr)
+        {
+            byte value = this._bus.Read(addr);
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Carry, (value & 0x80) != 0);
+            value <<= 1;
+            this._bus.Write(value, addr);
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Zero, value == 0);
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Negative, (value & 0x80) != 0);
+
+        }
+
+        private void LsrAccum()
+        {
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Carry, (this._registers.A & 0x01) != 0);
+            this._registers.A >>= 1;
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Zero, this._registers.A == 0);  
+        }
+        private void Lsr(ushort addr)
+        {
+            byte value = this._bus.Read(addr);
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Carry, (value & 0x01) != 0);
+            value >>= 1;
+            this._bus.Write(value, addr);
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Zero, value == 0);
+        }
+
+        private void RolAccum()
+        {
+            int oldCarry = this._registers.GetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Carry) ? 1 : 0;
+            int newCarry = (this._registers.A & 0x80) >> 7; // save bit 7 before shifting
+
+            this._registers.A <<= 1;
+            this._registers.A |= (byte)oldCarry; // old carry goes into bit 0
+
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Carry, newCarry != 0);
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Zero, this._registers.A == 0);
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Negative, (this._registers.A & 0x80) != 0);
+        }
+        private void Rol(ushort addr)
+        {
+            byte value = this._bus.Read(addr);
+            int oldCarry = this._registers.GetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Carry) ? 1 : 0;
+            int newCarry = (value & 0x80) >> 7; // save bit 7 before shifting
+            // todo: second write?
+            value <<= 1;
+            value |= (byte)oldCarry; // old carry goes into bit 0
+            this._bus.Write(value, addr);
+
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Carry, newCarry != 0);
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Zero, value == 0);
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Negative, (value & 0x80) != 0);
+        }
+
+        private void RorAccum()
+        {
+            int oldCarry = this._registers.GetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Carry) ? 1 : 0;
+            int newCarry = this._registers.A & 0x01; // save bit 0 before shifting
+
+            this._registers.A >>= 1;
+            this._registers.A |= (byte)(oldCarry << 7); // old carry goes into bit 7
+
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Carry, newCarry != 0);
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Zero, this._registers.A == 0);
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Negative, (this._registers.A & 0x80) != 0);
+        }
+
+        private void Ror(ushort addr)
+        {
+            byte value = this._bus.Read(addr);
+            int oldCarry = this._registers.GetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Carry) ? 1 : 0;
+            int newCarry = value & 0x01; // save bit 0 before shifting
+
+            value >>= 1;
+            value |= (byte)(oldCarry << 7); // old carry goes into bit 7
+            this._bus.Write(value, addr);
+
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Carry, newCarry != 0);
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Zero, value == 0);
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Negative, (value & 0x80) != 0);
+        }
         // BITWISE
         // COMPARE
         // BRANCH
