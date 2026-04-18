@@ -39,7 +39,12 @@ namespace NESEmulator.CPU
             else
                 P &= (byte)~(1 << (int)bit); 
         }
-        
+        public bool GetStatusRegisterFlag(StatusRegisterBit bit)
+        {
+            byte value = (byte)(this.P & (1 << (int)bit));
+            return value != 0;
+        }
+
         public override string ToString()
         {
             return $"PC: {PC.ToString("X4")}, A: {A.ToString("X2")}, X: {X.ToString("X2")}, Y: {Y.ToString("X2")}, S: {S.ToString("X2")}, P: {P.ToString("X2")}";

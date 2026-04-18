@@ -33,6 +33,12 @@ namespace NESEmulator.CPU
             _bus.Write(value, (ushort)(0x100 + this._registers.S)); // write to the stack
             this._registers.S--; // decrement stack pointer (wrap on overflow)
         }
+        
+        private void UpdateZeroNegativeFlags(byte value)
+        {
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Zero, value == 0);
+            this._registers.SetStatusRegisterFlag(NESCpuRegisters.StatusRegisterBit.Negative, (value & 0b1000) != 0);
+        }
 
         public byte PullStack()
         {

@@ -8,6 +8,10 @@ namespace NESEmulator.CPU
         // Read immediate 
         public byte ReadImmediate() { return _bus.Read(_registers.PC++); } // value stored right after the operand
         
+        public ushort GetImmediateAddress()
+        {
+            return ++_registers.PC;
+        }
         
         // Get address methods
         public byte GetZeroPageAddress() {
